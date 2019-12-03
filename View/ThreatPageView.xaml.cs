@@ -1,19 +1,11 @@
 ﻿using Lab2.Model;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Lab2.View
 {
@@ -166,17 +158,23 @@ namespace Lab2.View
         }
         public void SaveTable(object sender, EventArgs e)
         {
-            try 
+
+            var dialog = new System.Windows.Forms.FolderBrowserDialog();
+            var result = dialog.ShowDialog();
+            if (result == System.Windows.Forms.DialogResult.OK)
             {
-                string path = "thrlist.xlsx";
-                tableModel.SaveTableToFile(path);
-                MessageWindow messageWindow = new MessageWindow("File is successfully saved", System.IO.Directory.GetCurrentDirectory() + "\\" + path);
-                messageWindow.Show();
-            }
-            catch (Exception ex)
-            {
-                MessageWindow messageWindow = new MessageWindow("Some errors occurred during saving", ex.Message);
-                messageWindow.Show();
+                string path = dialog.SelectedPath + "\\thrlist.xlsx";
+                try
+                {
+                    tableModel.SaveTableToFile(path);
+                    MessageWindow messageWindow = new MessageWindow("File is successfully saved", path);
+                    messageWindow.Show();
+                }
+                catch (Exception ex)
+                {
+                    MessageWindow messageWindow = new MessageWindow("Some errors occurred during saving", ex.Message);
+                    messageWindow.Show();
+                }
             }
         }
     }
